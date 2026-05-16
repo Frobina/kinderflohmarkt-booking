@@ -1,27 +1,35 @@
 # app/main.py
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm import Session
 from typing import List
+from fastapi import FastAPI, Depends, status 
+from sqlalchemy.orm import Session
+from . import dadabase, models, schemas, crud
 
-from app import crud, models, schemas
-from app.database import engine, Base, get_db
+# Datenbank-Tabellen beim Start automatisch initialisieren
+models.Base.metadata.create_all(bind=database.engine)
 
-# Tabellen initialisieren
-Base.metadata.create_all(bind=engine)
-
-app = FastAPI(title="Kinderflohmarkt Standbuchung API")
+app = FastAPI(
+    title="Kinderflohmarkt Standbuchung API",
+    description="Backend-Service für die Organisation und Tischreservierung",
+    version=1.0.0"
+)
 
 @app.get("/")
 def read_root():
     return {"message": "Willkommen auf unserer Plattform des Kinderflohmarktes-Standbuchung-WIP!"}
 
 # Endpunkt: Alle Tische anzeigen
-@app.get("/tables/", response_model=List[schemas.TableResponse])
-def read_tables(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    tables = crud.get_tables(db, skip=skip, limit=limit)
-    return tables
 
-# Endpunkt: Einen neuen Tisch anlegen
-@app.post("/tables/", response_model=schemas.TableResponse)
-def create_table(table: schemas.TableCreate, db: Session = Depends(get_db)):
+@app.get("/tables/", 
+response_model=List[schemas.TableResponse])
+def read_tables(db: Session = 
+Depends(database.get_db)):
+   """Gibt eine Liste aller Tische zurück."""
+   return crud.get_table(db)
+   
+@app.post("/tables/", 
+response_model=schemas.TableResponse,
+status_code=status.HTTP_201_CREATED)
+def initialize_table(table: schemas.TableCreate,
+db:Session = Depends(database.get_db)):
+    """Erstellt einen neuen Tisch für den Flohmarkt.""")
     return crud.create_table(db=table=table)

@@ -1,6 +1,20 @@
 # app/crud.py
 from sqlalchemy.orm import Session
-from app import models, schemas
+from . import models, schemas
+
+# --- TISCH OPERATIONS (CRUD) ---
+
+def get_tables(db: Session):
+    """Liest alle registrierten Tische aus der Datenbank aus."""
+    return db.query(models.Table).all()
+
+def create_table(db: Session, table: schemas.TableCreate):
+    """Erstellt einen neuen Flohmarkt-Tisch in der Datenbank."""
+    db_table = models.Table(**table.model_dump())
+    db.add(db_table)
+    db.commit()
+    db.refresh(db_table)
+    return db_table
 
 # 1. Alle Tische aus der Datenbank abrufen
 def get_tables(db: Session, skip: int = 0, limit: int = 100):
