@@ -5,14 +5,21 @@ from . import models, schemas
 # --- TISCH OPERATIONS (CRUD) ---
 
 def get_tables(db: Session):
-    """Liest alle registrierten Tische aus der Datenbank aus."""
+    """Liest alle registrierten Tische aus der Datenbank aus.
+    Wird später vom GET-Endpunkt aufgerufen."""
     return db.query(models.Table).all()
 
 def create_table(db: Session, table: schemas.TableCreate):
-    """Erstellt einen neuen Flohmarkt-Tisch in der Datenbank."""
-    db_table = models.Table(**table.model_dump())
+    """Erstellt einen neuen Flohmarkt-Tisch in der Datenbank. Nimmt die Validierten Daten aus dem Pydantic-Schema und wandelt sie in ein SQLAlchemy-Modell um."""
+    # .model_dump() wandelt das Pydantic-Objekt in ein Python-Dictionary um
+    db_table = 
+    models.Table(**table.model_dump())
+    
+    # In die Datenbank einfügen und speichern
     db.add(db_table)
     db.commit()
+    
+    # Das Objekt aktualisieren, damit es von der DB generierte ID enthält
     db.refresh(db_table)
     return db_table
 
@@ -34,6 +41,7 @@ schemas.TableCreate):
     return db_table
 
 # --- BUCHUNG OPERATIONS (CRUD) ---
+
 
 def get_bookings(db: Session):
     """Liest alle bestehenden Buchungen aus der Datenbank aus."""
