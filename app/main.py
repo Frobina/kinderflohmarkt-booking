@@ -42,3 +42,22 @@ def book_a_table(booking: schemas.BookingCreate, db: Session = Depends(database.
             detail="Tisch nicht verfügbar oder existiert nicht."
         )
     return new_booking
+
+# --- ENDPUNKTE: STORNIERUNGEN ---
+
+@app.delete("/bookings/{booking_id}", status_code=status.HTTP_200_OK)
+def cancel_booking(booking_id: int, db: Session = Depends(database.get_db)) -> dict:
+    """
+    Storniert eine bestehende Buchung anhand ihrer ID und 
+    gibt den Tisch automatisch wieder frei.
+    """
+    success = crud.delete_booking(db, booking_id=booking_id)
+    
+    # Wenn die Buchung nicht gefunden wurde, Fehlermeldung zurückgeben
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Buchung mit der ID {booking_id} wurde nicht gefunden."
+        )
+        
+    return {"message": f"Buchung {booking_id} wurde erfolgreich storniert. Der Tisch ist wieder frei."}
