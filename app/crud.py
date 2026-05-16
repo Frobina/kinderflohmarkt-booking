@@ -32,3 +32,9 @@ schemas.TableCreate):
     db.commit()
     db.refresh(db_table) # Lädt die gernerierte ID aus der DB nach 
     return db_table
+
+# --- BUCHUNG OPERATIONS (CRUD) ---
+
+def get_bookings(db: Session):
+    """Liest alle bestehenden Buchungen aus der Datenbank aus."""
+    return db.query(models.Booking).all()
