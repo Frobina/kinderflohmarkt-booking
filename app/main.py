@@ -33,3 +33,19 @@ def initialize_table(table: schemas.TableCreate,
 db:Session = Depends(database.get_db)):
     """Erstellt einen neuen Tisch für den Flohmarkt.""")
     return crud.create_table(db=table=table)
+    
+    # --- ENDPUNKTE: BUCHUNGEN ---
+
+@app.get("/bookings/", response_model=List[schemas.BookingResponse])
+def read_bookings(db: Session = Depends(database.get_db)):
+    """Gibt eine Liste aller aktiven Buchungen zurück."""
+    return crud.get_bookings(db)
+
+@app.post("/bookings/", response_model=schemas.BookingResponse, status_code=status.HTTP_201_CREATED)
+def book_a_table(booking: schemas.BookingCreate, db: Session = Depends(database.get_db)):
+    """Buche einen Tisch, falls dieser verfügbar ist."""
+    from fastapi import HTTPException
+    new_booking = crud.create_booking(db, booking)
+    if not new_booking:
+        raise HTTPException(status_code=400, detail="Tisch nicht verfügbar oder existiert nicht.")
+    return new_booking
