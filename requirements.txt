@@ -1,5 +1,29 @@
 fastapi==0.110.0
-uvicorn==0.27.1
-sqlachemy==2.0.27
-pydantic==2.6.3
-requests==2.31.0
+    uvicorn==0.28.0
+    sqlalchemy==2.0.28
+    requests==2.31.0
+    pydantic[email]==2.6.3
+    ```
+*   **📂 `README.md`**
+    
+```markdown
+    # Kinderflohmarkt-Plattform - Backend
+    Modernes Buchungssystem für Kinderflohmärkte.
+
+    ## Sprint 1: Core Buchungs-Engine
+    Simulation eines 3-wöchigen agilen Sprints mit täglichen Commits.
+
+    ### Status
+    - Tag 1: Projekt-Setup & Git-Initialisierung [DONE]
+    ```
+
+---
+
+### Schritt 3: Den ersten lokalen Commit erstellen
+Jetzt fügen wir alle neuen Dateien der Versionsverwaltung hinzu und erstellen deinen ersten offiziellen Daily-Commit:
+```bash
+# 1. Alle Dateien für den Commit vormerken
+git add .
+
+# 2. Den Commit mit der passenden Nachricht erstellen
+git commit -m "chore: initialize project structure and dependencies"
